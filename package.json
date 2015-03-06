@@ -19,5 +19,16 @@
   "bugs": {
     "url": "https://github.com/rtc-io/rtc-tools-test/issues"
   },
-  "homepage": "https://github.com/rtc-io/rtc-tools-test"
+  "homepage": "https://github.com/rtc-io/rtc-tools-test",
+  "dependencies": {
+    "rtc-core": "^4.0.0",
+    "tape": "^3.5.0"
+  },
+  "devDependencies": {
+    "rtc-signaller": "^5.2.3",
+    "rtc-switchboard": "^2.2.1",
+    "rtc-switchboard-messenger": "^1.0.0",
+    "rtc-tools": "^4.2.3",
+    "testling": "^1.7.1"
+  }
 }
