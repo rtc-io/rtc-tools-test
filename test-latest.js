@@ -3,7 +3,7 @@ var messenger = require('rtc-switchboard-messenger');
 var extend = require('cog/extend');
 
 function createSignaller(opts) {
-  return signaller(messenger(location.origin), opts));
+  return signaller(messenger(location.origin), opts);
 }
 
 require('./')(
