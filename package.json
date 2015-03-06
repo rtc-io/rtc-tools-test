@@ -4,7 +4,7 @@
   "description": "A suite of tests for checking rtc-tools compatibility with any valid signaller",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "testling -x ./.travis/start-$BROWSER.sh"
   },
   "repository": {
     "type": "git",
@@ -30,5 +30,9 @@
     "rtc-switchboard-messenger": "^1.0.0",
     "rtc-tools": "^4.2.3",
     "testling": "^1.7.1"
+  },
+  "testling": {
+    "files": "test-latest.js",
+    "server": "server.js"
   }
 }
