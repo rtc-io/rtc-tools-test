@@ -4,7 +4,8 @@
   "description": "A suite of tests for checking rtc-tools compatibility with any valid signaller",
   "main": "index.js",
   "scripts": {
-    "test": "testling -x ./.travis/start-$BROWSER.sh"
+    "test": "testling -x ./.travis/start-$BROWSER.sh",
+    "gendocs": "gendocs > README.md"
   },
   "repository": {
     "type": "git",
