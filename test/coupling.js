@@ -6,6 +6,7 @@ var messengers = [];
 var dcs = [];
 var conns = [];
 var roomId = require('uuid').v4();
+var remoteIds = [];
 
 module.exports = function(rtc, createSignaller, opts) {
   test('create peer connections', function(t) {
@@ -24,8 +25,14 @@ module.exports = function(rtc, createSignaller, opts) {
 
   test('announce signallers', function(t) {
     t.plan(2);
-    signallers[0].once('peer:announce', t.pass.bind(t, '0 knows about 1'));
-    signallers[1].once('peer:announce', t.pass.bind(t, '1 knows about 0'));
+    signallers[0].once('peer:announce', function(data){
+      remoteIds[1] = data.id;
+      t.pass('0 knows about 1');
+    });
+    signallers[1].once('peer:announce', function(data){
+      remoteIds[0] = data.id;
+      t.pass('1 knows about 0');
+    });
 
     signallers[0].announce({ room: roomId });
     signallers[1].announce({ room: roomId });
@@ -34,19 +41,19 @@ module.exports = function(rtc, createSignaller, opts) {
   test('couple a --> b', function(t) {
     t.plan(1);
 
-    monitors[0] = rtc.couple(conns[0], signallers[1].id, signallers[0]);
+    monitors[0] = rtc.couple(conns[0], remoteIds[1], signallers[0]);
     t.ok(monitors[0], 'ok');
   });
 
   test('couple b --> a', function(t) {
     t.plan(1);
 
-    monitors[1] = rtc.couple(conns[1], signallers[0].id, signallers[1]);
+    monitors[1] = rtc.couple(conns[1], remoteIds[0], signallers[1]);
     t.ok(monitors[1], 'ok');
   });
 
   test('create a data channel on the master connection', function(t) {
-    var masterIdx = signallers[0].isMaster(signallers[1].id) ? 0 : 1;
+    var masterIdx = signallers[0].isMaster(remoteIds[1]) ? 0 : 1;
 
     t.plan(1);
 
