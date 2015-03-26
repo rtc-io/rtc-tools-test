@@ -4,7 +4,7 @@
   "description": "A suite of tests for checking rtc-tools compatibility with any valid signaller",
   "main": "index.js",
   "scripts": {
-    "test": "testling -x ./.travis/start-$BROWSER.sh",
+    "test": "testling -x start-$BROWSER",
     "gendocs": "gendocs > README.md"
   },
   "repository": {
@@ -33,7 +33,8 @@
     "rtc-switchboard": "^2.2.1",
     "rtc-switchboard-messenger": "^1.0.0",
     "rtc-tools": "^4.2.3",
-    "testling": "^1.7.1"
+    "testling": "^1.7.1",
+    "travis-multirunner": "^2.0.7"
   },
   "testling": {
     "files": "test-latest.js",
