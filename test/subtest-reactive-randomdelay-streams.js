@@ -115,7 +115,7 @@ module.exports = function(rtc, createSignaller, signallerOpts) {
         // https://chromium.googlesource.com/external/webrtc/+/master/talk/app/webrtc/peerconnection.cc#1026
         //
         // So, TLDR, we ignore default streams for the purposes of this test
-        if (evt.stream.id === 'default') return console.warn('Chrome default stream detected, ignoring');
+        if (evt.stream.id === 'default') return console.log('Chrome default stream detected, ignoring');
 
         var streamIdx = pendingIds.indexOf(evt && evt.stream && evt.stream.id);
         t.ok(streamIdx >= 0, 'stream found: ' + evt.stream.id);
