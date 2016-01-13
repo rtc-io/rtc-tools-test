@@ -105,6 +105,18 @@ module.exports = function(rtc, createSignaller, signallerOpts) {
       }
 
       function handleStream(evt) {
+        // NOTE!
+        // As the default offer constraints generated in rtc-taskqueue/index#generateConstraints
+        // includes {offerToReceiveAudio: true, offerToReceiveVideo: true}, Chrome will, in the
+        // absence of a appropriate stream to return will create a default stream to fit these requirements
+        // However, once a properly named stream exists (ie. passed with an msid:semantic id in the SDP),
+        // it will go ahead and remove the default stream
+        // The code for this can be found in the Chrome PeerConnection#SetRemoteDescription implementation, found at
+        // https://chromium.googlesource.com/external/webrtc/+/master/talk/app/webrtc/peerconnection.cc#1026
+        //
+        // So, TLDR, we ignore default streams for the purposes of this test
+        if (evt.stream.id === 'default') return console.warn('Chrome default stream detected, ignoring');
+
         var streamIdx = pendingIds.indexOf(evt && evt.stream && evt.stream.id);
         t.ok(streamIdx >= 0, 'stream found: ' + evt.stream.id);
         pendingCount -= 1;
