@@ -4,7 +4,7 @@
   "description": "A suite of tests for checking rtc-tools compatibility with any valid signaller",
   "main": "index.js",
   "scripts": {
-    "test": "browserify test-latest.js | broth start-$BROWSER | tap-spec",
+    "test": "browserify test-latest.js | broth start | tap-spec",
     "gendocs": "gendocs > README.md"
   },
   "repository": {
@@ -34,9 +34,9 @@
     "rtc-signaller": "^6.2.1",
     "rtc-switchboard": "^3.0.0",
     "rtc-switchboard-messenger": "^1.0.0",
-    "rtc-tools": "^4.2.3",
+    "rtc-tools": "^5.0.1",
     "tap-spec": "^4.0.2",
     "tape": "^4.0.1",
-    "travis-multirunner": "^2.0.7"
+    "travis-multirunner": "^3.0.0"
   }
 }
