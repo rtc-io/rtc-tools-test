@@ -34,7 +34,7 @@
     "rtc-signaller": "^6.2.1",
     "rtc-switchboard": "^3.0.0",
     "rtc-switchboard-messenger": "^1.0.0",
-    "rtc-tools": "^4.2.3",
+    "rtc-tools": "^5.0.1",
     "tap-spec": "^4.0.2",
     "tape": "^4.0.1",
     "travis-multirunner": "^3.0.0"

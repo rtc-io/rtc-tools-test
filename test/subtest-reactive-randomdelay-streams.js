@@ -76,7 +76,7 @@ module.exports = function(rtc, createSignaller, signallerOpts) {
       t.ok(monitors[1], 'ok');
     });
 
-    test(name + ': create streams', function(t) {
+    test(name + ': create streams', {timeout: 30000}, function(t) {
       var masterIdx = signallers[0].isMaster(remoteIds[1]) ? 0 : 1;
       var ids = times(streamCount).map(function(idx) {
         return 'newstream_' + idx;
