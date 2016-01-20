@@ -57,19 +57,23 @@ module.exports = function(rtc, createSignaller, opts) {
 
     t.plan(1);
 
-    dcs[masterIdx] = conns[masterIdx].createDataChannel('test-failing');
     conns[masterIdx ^ 1].ondatachannel = function(evt) {
       console.log('ondatachannel');
       dcs[masterIdx ^ 1] = evt.channel;
       t.pass('got data channel');
     };
-    conns[masterIdx].ondatachannel = function() {
-      console.log('other channel');
-      t.fail('other channel for data channel');
+    var channel = dcs[masterIdx] = conns[masterIdx].createDataChannel('test-failing');
+
+    channel.onmessage = function(evt) {
+      console.log('onmessage');
+      console.log(evt);
     }
 
+    channel.onopen = function() { console.log('channel opened'); }
+    channel.onclose = function() { console.log('channel closed') };
+    channel.onerror = function(err) { console.log('channel error'); console.log(err); };
+
     monitors[0].createOffer();
-    console.log('waiting for datachannel');
   });
 
   test('Check that we get a failing event.', function(t) {
