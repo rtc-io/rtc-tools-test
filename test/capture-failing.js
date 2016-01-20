@@ -1,14 +1,16 @@
 var test = require('tape');
-var signallers = [];
-var monitors = [];
-var scope = [];
-var messengers = [];
-var dcs = [];
-var conns = [];
-var roomId = require('uuid').v4();
-var remoteIds = [];
 
 module.exports = function(rtc, createSignaller, opts) {
+
+  var signallers = [];
+  var monitors = [];
+  var scope = [];
+  var messengers = [];
+  var dcs = [];
+  var conns = [];
+  var roomId = require('uuid').v4();
+  var remoteIds = [];
+
   test('create peer connections', function(t) {
     t.plan(2);
 
@@ -54,24 +56,25 @@ module.exports = function(rtc, createSignaller, opts) {
 
   test('create a data channel on the master connection', function(t) {
     var masterIdx = signallers[0].isMaster(remoteIds[1]) ? 0 : 1;
-
     t.plan(1);
 
+    // Note: This is a mongrel.
+    // Basically, Chrome has an error (https://bugs.chromium.org/p/webrtc/issues/detail?id=3792)
+    // whereby this test, running so soon after the test in `coupling`, results (somehow)
+    // in a data channel with the same SID (being 1) being created. This data channel is then
+    // closed prematurely (because they get mixed up).
+    // To avoid this, we pass in a custom channel ID (34) to solve the problem... but dang, that's
+    // ugly
+    var channel = dcs[masterIdx] = conns[masterIdx].createDataChannel('failing', { id: 34 });
     conns[masterIdx ^ 1].ondatachannel = function(evt) {
-      console.log('ondatachannel');
+      channel.onclose = undefined;
       dcs[masterIdx ^ 1] = evt.channel;
       t.pass('got data channel');
     };
-    var channel = dcs[masterIdx] = conns[masterIdx].createDataChannel('test-failing');
 
-    channel.onmessage = function(evt) {
-      console.log('onmessage');
-      console.log(evt);
-    }
-
-    channel.onopen = function() { console.log('channel opened'); }
-    channel.onclose = function() { console.log('channel closed') };
-    channel.onerror = function(err) { console.log('channel error'); console.log(err); };
+    channel.onclose = function() {
+      t.fail('data channel closed before peer received');
+    };
 
     monitors[0].createOffer();
   });
