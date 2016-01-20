@@ -59,11 +59,13 @@ module.exports = function(rtc, createSignaller, opts) {
 
     dcs[masterIdx] = conns[masterIdx].createDataChannel('test-failing');
     conns[masterIdx ^ 1].ondatachannel = function(evt) {
+      console.log('ondatachannel');
       dcs[masterIdx ^ 1] = evt.channel;
       t.pass('got data channel');
     };
 
     monitors[masterIdx].createOffer();
+    console.log('waiting for datachannel');
   });
 
   test('Check that we get a failing event.', function(t) {
