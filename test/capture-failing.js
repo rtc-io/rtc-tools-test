@@ -63,8 +63,12 @@ module.exports = function(rtc, createSignaller, opts) {
       dcs[masterIdx ^ 1] = evt.channel;
       t.pass('got data channel');
     };
+    conns[masterIdx].ondatachannel = function() {
+      console.log('other channel');
+      t.fail('other channel for data channel');
+    }
 
-    monitors[masterIdx].createOffer();
+    monitors[0].createOffer();
     console.log('waiting for datachannel');
   });
 
