@@ -1,6 +1,6 @@
 {
   "name": "rtc-tools-test",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "A suite of tests for checking rtc-tools compatibility with any valid signaller",
   "main": "index.js",
   "scripts": {
