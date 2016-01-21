@@ -2,7 +2,6 @@ var detect = require('rtc-core/detect');
 
 module.exports = function(tools, createSignaller, opts) {
   require('./coupling')(tools, createSignaller, opts);
-  require('./capture-failing')(tools, createSignaller, opts);
   require('./coupling-constraints')(tools, createSignaller, opts);
   require('./capture-close-localonly')(tools, createSignaller, opts);
 

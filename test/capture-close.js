@@ -74,6 +74,8 @@ module.exports = function(rtc, createSignaller, opts) {
   });
 
   test('close a, b aware', function(t) {
+    t.plan(3);
+
     var closeTimeout = setTimeout(function() {
       t.fail('close monitor timed out');
     }, 30000);
@@ -83,9 +85,16 @@ module.exports = function(rtc, createSignaller, opts) {
       clearTimeout(closeTimeout);
     };
 
-    t.plan(1);
-    monitors[1].once('closed', handleClose);
-    conns[0].close();
+    monitors[0].once('failing', function(){
+      t.pass('failing peer fires failing event');
+      monitors[0].once('closed', t.pass.bind(t, 'failing peer is closed'));
+    });
+
+    monitors[0].once('recovered', t.fail.bind(t, 'failing peer should not have recovered'));
+    monitors[1].once('failing', t.fail.bind(t, 'fail should not be received by closing peer'));
+    monitors[1].once('closed', t.pass.bind(t, 'closed peer fires closed event.'));
+
+    conns[1].close();
   });
 
   test('release references', function(t) {

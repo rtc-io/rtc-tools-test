@@ -14,6 +14,7 @@ module.exports = function(rtc, createSignaller, opts) {
 
     t.ok(conns[0] = rtc.createConnection(), 'created a');
     t.ok(conns[1] = rtc.createConnection(), 'created b');
+
   });
 
   test('create signallers', function(t) {
