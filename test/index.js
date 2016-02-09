@@ -4,6 +4,7 @@ module.exports = function(tools, createSignaller, opts) {
   require('./coupling')(tools, createSignaller, opts);
   require('./coupling-constraints')(tools, createSignaller, opts);
   require('./capture-close-localonly')(tools, createSignaller, opts);
+  require('./coupling-abort')(tools, createSignaller, opts);
 
   if (! detect.moz) {
     require('./coupling-reactive')(tools, createSignaller, opts);
