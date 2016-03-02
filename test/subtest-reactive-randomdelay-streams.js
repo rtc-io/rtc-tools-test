@@ -76,7 +76,11 @@ module.exports = function(rtc, createSignaller, signallerOpts) {
       t.ok(monitors[1], 'ok');
     });
 
-    test(name + ': create streams', {timeout: 30000}, function(t) {
+    test(name + ': create streams', function(t) {
+
+      var timeout = setTimeout(function() {
+        t.end(name + ': create streams timed out after 30 seconds');
+      }, 30000);
       var masterIdx = signallers[0].isMaster(remoteIds[1]) ? 0 : 1;
       var ids = times(streamCount).map(function(idx) {
         return 'newstream_' + idx;
@@ -93,9 +97,10 @@ module.exports = function(rtc, createSignaller, signallerOpts) {
         stream = contexts[idx].createMediaStreamDestination().stream;
         stream.id = ids.shift();
         conns[idx].addStream(stream);
+        if (!conns[idx]) console.log('connection ' + idx + ' does not exist');
 
         pendingIds.push(stream.id);
-        console.log('created stream ' + stream.id + ' on connection: ' + idx + ' ' + ids.length + ' to go');
+        console.log('created stream ' + stream.id + ' on connection: ' + idx + ' [' + ids.length + ' to go]');
 
         if (ids.length > 0) {
           setTimeout(function() {
@@ -118,13 +123,14 @@ module.exports = function(rtc, createSignaller, signallerOpts) {
         if (evt.stream.id === 'default') return console.log('Chrome default stream detected, ignoring');
 
         var streamIdx = pendingIds.indexOf(evt && evt.stream && evt.stream.id);
-        t.ok(streamIdx >= 0, 'stream found: ' + evt.stream.id);
         pendingCount -= 1;
+        t.ok(streamIdx >= 0, 'stream found: ' + evt.stream.id + ' [' + pendingCount + ' remaining]');
 
         if (pendingCount === 0) {
           conns[masterIdx ^ 1].removeEventListener('addstream', handleStream);
           conns[masterIdx].removeEventListener('addstream', handleStream);
           t.pass('got all channels');
+          clearTimeout(timeout);
         }
       }
 
